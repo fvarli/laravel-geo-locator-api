@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreLocationRequest;
 use App\Http\Requests\UpdateLocationRequest;
+use App\Http\Resources\LocationResource;
 use App\Services\LocationService;
 use App\Traits\ApiResponse;
 
@@ -25,7 +26,7 @@ class LocationController extends Controller
     public function index()
     {
         $locations = $this->locationService->getAllLocations();
-        return $this->success($locations);
+        return $this->success(LocationResource::collection($locations));
     }
 
     /**
@@ -33,7 +34,7 @@ class LocationController extends Controller
      */
     public function store(StoreLocationRequest $request) {
         $location = $this->locationService->createLocation($request->validated());
-        return $this->success($location, "Location added successfully", 201);
+        return $this->success(new LocationResource($location), "Location added successfully", 201);
     }
 
     /**
@@ -42,7 +43,7 @@ class LocationController extends Controller
     public function show(string $id)
     {
         $location = $this->locationService->getLocationById($id);
-        return $this->success($location);
+        return $this->success(new LocationResource($location));
     }
 
     /**
@@ -51,7 +52,7 @@ class LocationController extends Controller
     public function update(UpdateLocationRequest $request, string $id)
     {
         $location = $this->locationService->updateLocation($id, $request->validated());
-        return $this->success($location, "Location updated successfully");
+        return $this->success(new LocationResource($location), "Location updated successfully");
     }
 
     /**
