@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  # 1. Laravel Uygulaması
+  # 1. Laravel Applicaiton
   app:
     build:
       context: .
@@ -24,7 +24,7 @@ services:
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
 
-  # 2. MySQL Veritabanı
+  # 2. MySQL Database
   db:
     image: mysql:8.0
     container_name: mysql_db
