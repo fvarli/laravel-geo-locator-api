@@ -19,4 +19,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('locations', LocationController::class);
+
+// Add rate limiting to API routes  (10 requests per minute)
+Route::middleware(['throttle:10,1'])->apiResource('locations', LocationController::class);
