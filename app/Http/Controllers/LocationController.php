@@ -6,14 +6,10 @@ use App\Http\Requests\StoreLocationRequest;
 use App\Http\Requests\UpdateLocationRequest;
 use App\Http\Resources\LocationResource;
 use App\Services\LocationService;
-use App\Traits\ApiResponse;
-
 use Illuminate\Http\Request;
 
 class LocationController extends Controller
 {
-    use ApiResponse;
-
     protected $locationService;
 
     public function __construct(LocationService $locationService) {
