@@ -3,7 +3,11 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -34,6 +38,15 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        // 404 - Model Not Found
+        if ($exception instanceof ModelNotFoundException || $exception instanceof NotFoundHttpException) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Resource not found.',
+            ], 404);
+        }
+
+        // 429 - Too Many Requests
         if ($exception instanceof ThrottleRequestsException) {
             return response()->json([
                 'success' => false,
@@ -41,6 +54,24 @@ class Handler extends ExceptionHandler
             ], 429);
         }
 
+        // 401 - Authentication Failure
+        if ($exception instanceof AuthenticationException) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthenticated.',
+            ], 401);
+        }
+
+        // 422 - Validation Error
+        if ($exception instanceof ValidationException) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation error.',
+                'errors' => $exception->errors(),
+            ], 422);
+        }
+
+        // Default: Return Parent Handler
         return parent::render($request, $exception);
     }
 }
