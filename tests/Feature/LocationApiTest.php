@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use App\Models\User;
 use App\Models\Location;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -11,12 +12,28 @@ class LocationApiTest extends TestCase
 
     use RefreshDatabase;
 
+    protected $user;
+    protected $token;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Create a test user
+        $this->user = User::factory()->create();
+        
+        // Generate API token for the test user
+        $this->token = $this->user->createToken('test_token')->plainTextToken;
+    }
+
     public function test_index_returns_all_locations()
     {
-        $locations = Location::factory()->count(10)->create();
-    
-        $response = $this->getJson('/api/v1/locations');
-    
+        Location::factory()->count(10)->create();
+
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer $this->token"
+        ])->getJson('/api/v1/locations');
+
         $response->assertStatus(200)
                  ->assertJsonStructure([
                      'success',
@@ -42,7 +59,9 @@ class LocationApiTest extends TestCase
             'marker_color' => '#ffffff'
         ];
 
-        $response = $this->postJson('/api/v1/locations', $locationData);
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer $this->token"
+        ])->postJson('/api/v1/locations', $locationData);
 
         $response->assertStatus(201)
                  ->assertJson(['data' => $locationData]);
@@ -52,7 +71,9 @@ class LocationApiTest extends TestCase
     {
         $location = Location::factory()->create();
 
-        $response = $this->getJson("/api/v1/locations/{$location->id}");
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer $this->token"
+        ])->getJson("/api/v1/locations/{$location->id}");
 
         $response->assertStatus(200)
                  ->assertJson(['data' => [
@@ -74,7 +95,9 @@ class LocationApiTest extends TestCase
             'marker_color' => '#000000'
         ];
 
-        $response = $this->putJson("/api/v1/locations/{$location->id}", $updatedData);
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer $this->token"
+        ])->putJson("/api/v1/locations/{$location->id}", $updatedData);
 
         $response->assertStatus(200)
                  ->assertJson(['data' => $updatedData]);
@@ -84,7 +107,9 @@ class LocationApiTest extends TestCase
     {
         $location = Location::factory()->create();
 
-        $response = $this->deleteJson("/api/v1/locations/{$location->id}");
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer $this->token"
+        ])->deleteJson("/api/v1/locations/{$location->id}");
 
         $response->assertStatus(200)
                  ->assertJson(['message' => 'Location deleted successfully']);
