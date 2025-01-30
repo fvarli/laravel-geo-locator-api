@@ -71,6 +71,15 @@ class Handler extends ExceptionHandler
             ], 422);
         }
 
+        // 405 - Method Not Allowed
+        if ($request->is('api/*')) {
+            if ($exception instanceof \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid request method. Please check API documentation.'
+                ], 405);
+            }
+        }
         // Default: Return Parent Handler
         return parent::render($request, $exception);
     }
