@@ -20,8 +20,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Grouped API routes with rate limiting (10 requests per minute)
-Route::middleware(['throttle:10,1'])->group(function () {
+// Grouped API routes with rate limiting (10 requests per minute) and versioning
+Route::prefix('v1')->middleware(['throttle:10,1'])->group(function () {
     Route::apiResource('locations', LocationController::class);
     Route::get('/routes', [RouteController::class, 'calculateRoute']);
 });
