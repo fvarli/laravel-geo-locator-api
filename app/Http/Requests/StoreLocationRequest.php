@@ -11,7 +11,7 @@ class StoreLocationRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->check(); // Only authenticated users can pass validation
     }
 
     /**

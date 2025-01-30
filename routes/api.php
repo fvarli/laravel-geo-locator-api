@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\RouteController;
 use Illuminate\Http\Request;
@@ -16,12 +17,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// API v1 routes
+Route::prefix('v1')->group(function () {
 
-// Grouped API routes with rate limiting (10 requests per minute) and versioning
-Route::prefix('v1')->middleware(['throttle:10,1'])->group(function () {
-    Route::apiResource('locations', LocationController::class);
-    Route::get('/routes', [RouteController::class, 'calculateRoute']);
+    // Public authentication routes
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
+
+    // Protected routes (Require authentication)
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/logout', [AuthController::class, 'logout']);
+        Route::get('/user', [AuthController::class, 'user']);
+
+        // Rate-limited API routes
+        Route::middleware(['throttle:10,1'])->group(function () {
+            Route::apiResource('locations', LocationController::class);
+            Route::get('/routes', [RouteController::class, 'calculateRoute']);
+        });
+    });
+
 });

@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateLocationRequest extends FormRequest
+class LoginRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return auth()->check(); // Only authenticated users can pass validation
+        return true;
     }
 
     /**
@@ -22,10 +22,8 @@ class UpdateLocationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|string|max:255',
-            'latitude' => 'sometimes|numeric|between:-90,90',
-            'longitude' => 'sometimes|numeric|between:-180,180',
-            'marker_color' => 'sometimes|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'email' => 'required|email',
+            'password' => 'required|string|min:8',
         ];
     }
 }
