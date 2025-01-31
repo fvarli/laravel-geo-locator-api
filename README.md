@@ -1,66 +1,165 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📍 Laravel Geo Locator API Guide
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A robust and scalable location management API built with **Laravel 10**, **MySQL**, and **Docker**. This project allows users to manage locations, visualize them on a map with custom markers, and calculate optimal routes based on straight-line distances. The API is fully containerized with Docker, making it easy to deploy and scale.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Location Management**:
+  - Add new locations with name, latitude, longitude, and custom marker color.
+  - Edit existing locations.
+  - Delete locations.
+  - List all saved locations with their details.
+  - View details of a specific location.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Route Calculation**:
+  - Calculate the optimal route from a given starting point to all saved locations, sorted by distance (straight-line, bird's-eye view).
 
-## Learning Laravel
+- **Authentication**:
+  - User registration and login with token-based authentication.
+  - Protected endpoints for authenticated users only.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **Rate Limiting**:
+  - API rate limiting to prevent abuse.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- **Validation**:
+  - Robust validation for all incoming requests.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- **Dockerized**:
+  - Fully containerized with Docker and Docker Compose for easy setup and deployment.
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Technologies Used
 
-### Premium Partners
+- **Backend**: Laravel 10 (PHP 8.2)
+- **Database**: MySQL 8.0
+- **Containerization**: Docker & Docker Compose
+- **Web Server**: Nginx
+- **ORM**: Eloquent ORM
+- **API Design**: RESTful API
+- **Authentication**: Laravel Sanctum (Token-based)
+- **Testing**: Feature Tests
+- **Validation**: Laravel Request Validation
+- **Rate Limiting**: Laravel Throttle Middleware
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+---
 
-## Contributing
+## Project Architecture
+- **API Response Structure**: Standardized responses using `APIResponse.php` for success & error handling.
+- **Service Layer**: Business logic is handled in `App\Services` (e.g., `LocationService.php`).
+- **Exception Handling**: Centralized exception handling in `App\Exceptions\Handler.php`.
+- **Middleware**: Custom middleware for security, authentication, and rate limiting.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Project Structure
 
-## Security Vulnerabilities
+The project follows a layered architecture with clear separation of concerns:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- **Controllers**: Handle HTTP requests and responses.
+- **Services**: Contain business logic.
+- **Models**: Represent database entities.
+- **Requests**: Handle validation for incoming requests.
+- **Resources**: Transform models into JSON responses.
+- **Middleware**: Handle cross-cutting concerns like authentication and rate limiting.
+- **Tests**: Contains all API tests.
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## API Endpoints
+
+### Authentication
+- **POST /api/v1/register**: Register a new user.
+- **POST /api/v1/login**: Login and get an access token.
+- **POST /api/v1/logout**: Logout and revoke the access token.
+- **GET /api/v1/user**: Get authenticated user details.
+
+### Locations
+- **GET /api/v1/locations**: List all locations.
+- **POST /api/v1/locations**: Add a new location.
+- **GET /api/v1/locations/{id}**: Get details of a specific location.
+- **PUT /api/v1/locations/{id}**: Update a location.
+- **DELETE /api/v1/locations/{id}**: Delete a location.
+
+### Routes
+- **GET /api/v1/routes**: Calculate the optimal route from a given starting point (latitude, longitude) to all saved locations.
+
+---
+
+## Setup & Installation
+
+### Prerequisites
+
+- Docker and Docker Compose installed on your machine.
+- Git for cloning the repository.
+
+### Step 1: Clone the Repository
+
+```bash
+git clone https://github.com/fvarli/geo-locator-api.git
+cd geo-locator-api
+```
+
+### Step 2: Configure Environment Variables
+
+Copy the `.env.example` file to `.env` and update the database credentials:
+
+```bash
+cp .env.example .env
+```
+
+Edit the `.env` file:
+
+```bash
+DB_CONNECTION=mysql
+DB_HOST=db
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=root
+DB_PASSWORD=secret
+DB_ROOT_PASSWORD=secret
+```
+
+### Step 3: Build and Run Docker Containers
+
+Run the following command to build and start the Docker containers:
+
+```bash
+docker-compose up -d --build
+```
+
+This will start the following services:
+- **app**: Laravel application (PHP 8.2)
+- **db**: MySQL database
+- **webserver**: Nginx web server
+
+### Step 4: Run Migrations
+
+After the containers are up, run the database migrations:
+
+```bash
+docker-compose exec app php artisan migrate
+```
+
+### Step 5: Access the API
+
+The API will be available at `http://localhost:8000/api/v1`.
+
+---
+
+## Running Tests
+
+To run the Feature Tests, execute the following command:
+
+```bash
+docker-compose exec app php artisan test
+```
+
+## Contact
+
+- Website: [www.ferzendervarli.com](https://www.ferzendervarli.com/)
+- GitHub: [github.com/fvarli](https://github.com/fvarli)
+- LinkedIn: [linkedin.com/in/fvarli](https://www.linkedin.com/in/fvarli)
