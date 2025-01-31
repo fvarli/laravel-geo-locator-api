@@ -6,6 +6,9 @@ A robust and scalable location management API built with **Laravel 10**, **MySQL
 
 ## Features
 
+- **Versioning**:
+  - The API follows versioning conventions (/v1/) for backward compatibility and future updates.
+
 - **Location Management**:
   - Add new locations with name, latitude, longitude, and custom marker color.
   - Edit existing locations.
@@ -29,6 +32,9 @@ A robust and scalable location management API built with **Laravel 10**, **MySQL
 - **Dockerized**:
   - Fully containerized with Docker and Docker Compose for easy setup and deployment.
 
+- **Postman Collections & Environments**:
+  - Predefined Postman collection and environment files are available in resources/docs/postman/ for quick API testing.
+
 ---
 
 ## Technologies Used
@@ -38,7 +44,7 @@ A robust and scalable location management API built with **Laravel 10**, **MySQL
 - **Containerization**: Docker & Docker Compose
 - **Web Server**: Nginx
 - **ORM**: Eloquent ORM
-- **API Design**: RESTful API
+- **API Design**: RESTful API with versioning (/v1/)
 - **Authentication**: Laravel Sanctum (Token-based)
 - **Testing**: Feature Tests
 - **Validation**: Laravel Request Validation
@@ -54,7 +60,6 @@ A robust and scalable location management API built with **Laravel 10**, **MySQL
 
 ---
 
-
 ## Project Structure
 
 The project follows a layered architecture with clear separation of concerns:
@@ -66,6 +71,9 @@ The project follows a layered architecture with clear separation of concerns:
 - **Resources**: Transform models into JSON responses.
 - **Middleware**: Handle cross-cutting concerns like authentication and rate limiting.
 - **Tests**: Contains all API tests.
+- **Documentation**:
+  - Postman collection: resources/docs/postman/laravel-geo-locator-api.postman_collection.json
+  - Postman environment: resources/docs/postman/laravel-geo-locator-api.postman_environment.json
 
 ---
 
@@ -157,6 +165,10 @@ To run the Feature Tests, execute the following command:
 ```bash
 docker-compose exec app php artisan test
 ```
+
+![Feature Test](resources/docs/tests/test-feature.png)
+
+![List Routes](resources/docs/postman/postman-list-routes.png)
 
 ## Contact
 
